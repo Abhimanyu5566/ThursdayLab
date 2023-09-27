@@ -1,0 +1,70 @@
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
+
+public class App 
+{
+    public static void main( String[] args )
+    {
+    	Configuration con = new Configuration().configure().addAnnotatedClass(Agent.class);
+    	SessionFactory sf = con.buildSessionFactory();
+    	
+    	CreateAgent(sf,"Abhimanyu","Abhiimanyu@gmail.com",24568745);  				//creating Agent
+    	CreateAgent(sf,"Sachin","sachin@gmail.com",1456788545);				//creating Agent
+    	CreateAgent(sf,"rinshu","rinshu@gmail.com",7454785408);				//creating Agent
+    	
+    	//Get Agents
+    	getAgentbyId(sf,1);
+    	getAgentbyId(sf,2);
+    	getAgentbyId(sf,3);
+    	
+    	//updating Agent
+    	updateAgentbyId(sf,2,"Rinshu","rinshu@hotmail.com",124356789);
+    	System.out.println("After Updating Agent");
+    	getAgentbyId(sf,2);
+    	
+    	//Delete Agent
+    	deleteAgentbyId(sf,2);
+    	
+    }
+    public static void CreateAgent(SessionFactory sf,String name,String Email,long phno)
+	{
+    	Session ss=sf.openSession();
+    	Transaction t1=ss.beginTransaction();
+    	Agent a1=new Agent();
+    	a1.setName(name);
+    	a1.setEmail(Email);
+    	a1.setPhone_number(phno);
+    	ss.save(a1);
+    	t1.commit();
+	}
+    public static void getAgentbyId(SessionFactory sf,int id) {
+    	Session ss=sf.openSession();
+    	Transaction t1=ss.beginTransaction();
+    	Agent a1=ss.get(Agent.class, id);
+    	System.out.print(a1.getAgent_id()+" ");
+    	System.out.print(a1.getName()+" ");
+    	System.out.print(a1.getEmail()+" ");
+    	System.out.print(a1.getPhone_number()+" ");	
+    	System.out.println();
+    }
+    public static void deleteAgentbyId(SessionFactory sf,int id) {
+    	Session ss=sf.openSession();
+    	Transaction t1=ss.beginTransaction();
+    	Agent a1=ss.get(Agent.class, id);
+    	ss.delete(a1);
+    	t1.commit();
+}
+    public static void updateAgentbyId(SessionFactory sf,int id,String name,String Email,long phno) {
+    	Session ss=sf.openSession();
+    	Transaction t1=ss.beginTransaction();
+    	Agent a1=ss.get(Agent.class, id);
+    	a1.setName(name);
+    	a1.setEmail(Email);
+    	a1.setPhone_number(phno);
+    	ss.save(a1);
+    	t1.commit();
+    }
+    
+}
